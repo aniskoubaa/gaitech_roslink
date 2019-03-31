@@ -131,8 +131,7 @@ class ROSLinkBridgeRIA_E100:
     def websocketThread():
         if(not ROSLinkBridgeRIA_E100.WSconnected):
             # this for public network
-            WS_url = "ws://"+ ROSLinkBridgeRIA_E100.gcs_server_ip+":9090/websockets/roslink/user/"+str(ROSLinkStateVariables.owner_id) +"/robot/"+ROSLinkStateVariables.key+"/robot" 
-            # WS_url = "ws://"+ ROSLinkBridgeRIA_E100.gcs_server_ip+":9090/";
+            WS_url = "ws://"+ ROSLinkBridgeRIA_E100.gcs_server_ip+":9090/";
             ROSLinkBridgeRIA_E100.ws = websocket.WebSocketApp(WS_url,
                                 on_message = ROSLinkBridgeRIA_E100.on_message,
                                 on_error = ROSLinkBridgeRIA_E100.on_error,
