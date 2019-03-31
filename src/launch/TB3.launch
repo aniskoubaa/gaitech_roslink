@@ -1,0 +1,22 @@
+<launch>
+  <node pkg="roslink-ba" name="udp_client_roslink_bridge_turtlebot_node" type="roslink_bridge_tb_burger_WS.py" output="screen"/>
+  <param name="ground_station_ip" value='208.113.133.197' />
+  <param name="ground_station_port" value='25500' />
+
+  <param name="heartbeat_msg_rate" value="1" />
+  <param name="robot_status_msg_rate" value="0.5" />
+  <param name="global_motion_msg_rate" value="1" />
+  <param name="gps_raw_info_msg_rate" value="0.5" />
+  <param name="range_finder_data_msg_rate" value="0.5" />
+  <param name="map_location" value="/home/ros/catkin_ws/src/roslink/src/maze.png" />
+  <param name="ROSLing_Image_msg_rate" value="2" />
+
+  <param name="roslink_version" value="1"/>
+  <param name="ros_version" value="8"/>
+  <param name="system_id" value='12'/>
+  <param name="robot_name" value="MyTurtlebot" />
+  <param name="type" value="0"/>
+   <param name="owner_id" value="1"/>
+  <param name="key" value="o22Y1"/>
+
+</launch>

@@ -1,0 +1,20 @@
+<launch>
+  <node pkg="roslink" name="udp_client_gapter_node" type="roslink_bridge_gapter.py" output="screen"/>
+  <param name="ground_station_ip" value='192.168.1.152' />
+  <param name="ground_station_port" value='25500' />
+
+  <param name="heartbeat_msg_period" value="1" />
+  <param name="robot_status_msg_period" value="0.5" />
+  <param name="global_motion_msg_period" value="0.5" />
+  <param name="gps_raw_info_msg_period" value="0.5" />
+  <param name="range_finder_data_msg_period" value="0.5" />
+
+  <param name="roslink_version" value="1" />
+  <param name="ros_version" value="8" />
+  <param name="system_id" value='12' />
+  <param name="robot_name" value="Gapter Drone" />
+  <param name="type" value="2" />
+  <param name="owner_id" value="3" />
+  <param name="key" value="1243-0000-0000-FGFG" />
+
+</launch>

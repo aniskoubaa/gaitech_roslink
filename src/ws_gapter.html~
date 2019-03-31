@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8" />
+
+<title>WebSocket Test</title>
+
+<p id="demo"></p>
+<script language="javascript" type="text/javascript">
+
+
+  function init()
+  {
+	document.myform.url.value = "ws://localhost:8000/"
+	document.myform.inputtext.value = "Hello World!"
+	document.myform.disconnectButton.disabled = true;
+  }
+
+  function doConnect()
+  {
+    websocket = new WebSocket(document.myform.url.value);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+  function onOpen(evt)
+  {
+    writeToScreen("connected\n");
+	document.myform.connectButton.disabled = true;
+	document.myform.disconnectButton.disabled = false;
+  }
+
+  function onClose(evt)
+  {
+    writeToScreen("disconnected\n");
+	document.myform.connectButton.disabled = false;
+	document.myform.disconnectButton.disabled = true;
+  }
+
+  function onMessage(evt)
+  {
+    writeToScreen("response: " + evt.data + '\n');
+//parse coming msgs
+  }
+
+  function onError(evt)
+  {
+    writeToScreen('error: ' + evt.data + '\n');
+
+	websocket.close();
+
+	document.myform.connectButton.disabled = false;
+	document.myform.disconnectButton.disabled = true;
+
+  }
+
+  function doSend(message)
+  {
+    //writeToScreen("sent: " + message + '\n'); 
+    websocket.send(message);
+  }
+
+  function writeToScreen(message)
+  {
+    document.myform.outputtext.value += message
+	document.myform.outputtext.scrollTop = document.myform.outputtext.scrollHeight;
+
+  }
+
+  window.addEventListener("load", init, false);
+
+
+   function sendText() {
+		doSend( document.myform.inputtext.value );
+   }
+
+   function sendTakeoff() {
+
+   var text ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":102, "sequence_number":1, "key":"1243-0000-0000-FGFG"}, "altitude": 1 }';
+   var obj = JSON.parse(text);
+   writeToScreen("sending takeoff command: " + '\n'); 
+
+   doSend( JSON.stringify(obj) );
+   
+   }
+
+   function sendLand() {
+   var text ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":103, "sequence_number":1, "key":"1243-0000-0000-FGFG"}}';
+   var obj = JSON.parse(text);
+   writeToScreen("sending Land command: " + '\n'); 
+
+   doSend( JSON.stringify(obj) );
+   }
+   
+   function sendArm() {
+	   var text ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":104, "sequence_number":1, "key":"1243-0000-0000-FGFG"}}';
+	   var obj = JSON.parse(text);
+	   writeToScreen("sending Land command: " + '\n'); 
+
+	   doSend( JSON.stringify(obj) );
+	   }
+   
+   function sendDisarm() {
+	   var text ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":105, "sequence_number":1, "key":"1243-0000-0000-FGFG"}}';
+	   var obj = JSON.parse(text);
+	   writeToScreen("DISARMED: DISARMING MOTORS: " + '\n'); 
+
+	   doSend( JSON.stringify(obj) );
+	   }
+   
+   function sendGuided() {
+	   var text ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":106, "sequence_number":1, "key":"1243-0000-0000-FGFG"}, "flightMode":2 }';
+	   var obj = JSON.parse(text);
+	   writeToScreen("set mode to GUIDED: " + '\n'); 
+
+	   doSend( JSON.stringify(obj) );
+	   }
+   
+   function sendStabilize() {
+	   var text ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":107, "sequence_number":1}}';
+	   var obj = JSON.parse(text);
+	   writeToScreen("set mode to STABILIZE: " + '\n'); 
+
+	   doSend( JSON.stringify(obj) );
+	   }
+
+  function clearText() {
+		document.myform.outputtext.value = "";
+   }
+
+   function doDisconnect() {
+		websocket.close();
+   }
+   
+   function GoForward(){
+	   
+	    var x = document.getElementById("speed");
+	    var speed = x.options[x.selectedIndex].value;
+    	var json_msg ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":100, "sequence_number":1}, "vx": 0, "vy": -'+ speed+ ', "vz":0, "wx": 0, "wy":0, "wz":0 }';
+
+		   var obj = JSON.parse(json_msg);
+		   writeToScreen("Send Go forward command: " + '\n'); 
+
+		   doSend( JSON.stringify(obj) );
+	    
+	    //var text = speed;
+	    //text += x.options[x.selectedIndex].value + "<br>";
+	    //document.getElementById("demo").innerHTML = text;
+   }
+   
+   function GoBackward(){
+	   
+	    var x = document.getElementById("speed");
+	    var speed = x.options[x.selectedIndex].value;
+	    
+    	var json_msg ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":100, "sequence_number":1}, "vx": 0, "vy": '+ speed+ ', "vz":0, "wx": 0, "wy":0, "wz":0 }';
+
+		   var obj = JSON.parse(json_msg);
+		   writeToScreen("Send Go forward command: " + '\n'); 
+
+		   doSend( JSON.stringify(obj) );
+
+  }
+   
+   function GoLeft(){
+	   
+
+	    var x = document.getElementById("speed");
+	    var speed = x.options[x.selectedIndex].value;
+	    
+	   	var json_msg ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":100, "sequence_number":1}, "vx": -'+ speed+ ', "vy":0, "vz":0, "wx": 0, "wy":0, "wz":0 }';
+
+		   var obj = JSON.parse(json_msg);
+		   writeToScreen("Send Go forward command: " + '\n'); 
+
+		   doSend( JSON.stringify(obj) );
+ }
+   
+   function GoRight(){
+	   
+	    var x = document.getElementById("speed");
+	    var speed = x.options[x.selectedIndex].value;
+    	var json_msg ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":100, "sequence_number":1}, "vx":'+ speed+ ', "vy":0, "vz":0, "wx": 0, "wy":0, "wz":0 }';
+
+		   var obj = JSON.parse(json_msg);
+		   writeToScreen("Send Go forward command: " + '\n'); 
+
+		   doSend( JSON.stringify(obj) );
+}
+   
+   function Stop(){
+	   
+
+	    	var json_msg ='{"header":{"roslink_version":1, "ros_version":8, "system_id":1, "message_id":100, "sequence_number":1}, "vx": 0, "vy": 0, "vz":0, "wx": 0, "wy":0, "wz":0 }';
+		   var obj = JSON.parse(json_msg);
+		   writeToScreen("Send Go forward command: " + '\n'); 
+
+		   doSend( JSON.stringify(obj) );
+}
+
+
+</script>
+
+<div id="output"></div>
+
+<form name="myform">
+<p>
+<textarea name="outputtext" rows="20" cols="50"></textarea>
+</p>
+
+<p>
+<textarea name="url" cols="50"></textarea>
+</p>
+<p>
+
+<p id="demo"></p>
+
+<input type="button" name=connectButton style="width:200px" value="Connect" onClick="doConnect();">
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Choose the speed:  
+<select id="speed">
+  <option value="0.1">0.1</option>
+  <option value="0.2" selected="selected">0.2</option>
+  <option value="0.3">0.3</option>
+  <option value="0.4">0.4</option>
+</select>
+<br>
+<input type="button" name=disconnectButton style="width:200px"  value="Disconnect" onClick="doDisconnect();">
+
+
+<br>
+<input type="button" name=sendButton style="width:97px" value="Arm" onClick="sendArm();">
+<input type="button" name=sendButton style="width:97px" value="Disarm" onClick="sendDisarm();">
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp; 
+ <input type="button" name=forwardButton style="width:100px"  value="Forward" onClick="GoForward();">
+
+<br>
+<input type="button" name=sendButton style="width:97px" value="Guided" onClick="sendGuided();">
+<input type="button" name=sendButton style="width:97px" value="Stabilize" onClick="sendStabilize();">
+
+&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp; 
+ <input type="button" name=leftButton style="width:100px"  value="Left" onClick="GoLeft();">
+ <input type="button" name=rightButton style="width:100px"  value="Right" onClick="GoRight();">
+
+<br>
+<input type="button" name=sendButton style="width:97px"  value="Takeoff" onClick="sendTakeoff();">
+<input type="button" name=sendButton style="width:97px"  value="Land" onClick="sendLand();">
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp; 
+ <input type="button" name=backwardButton style="width:100px"  value="Backward" onClick="GoBackward();">
+
+<br>
+
+<input type="button" name=clearButton style="width:200px" value="Clear" onClick="clearText();">
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp; 
+ <input type="button" name=stopButton style="width:100px"  value="Stop" onClick="Stop();">
+
+
+</p>
+
+
+</form>
+</html> 
+
